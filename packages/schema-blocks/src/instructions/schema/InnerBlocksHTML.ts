@@ -16,6 +16,7 @@ class InnerBlocksHTML extends SchemaInstruction {
 		skipFirst?: boolean;
 		split?: string;
 		nullWhenEmpty?: boolean;
+		default?: string;
 	}
 
 	/**
@@ -35,12 +36,14 @@ class InnerBlocksHTML extends SchemaInstruction {
 		}
 
 		if ( values.length === 0 && this.options.nullWhenEmpty ) {
-			return null;
+			return this.options.default;
 		}
 
 		const html = values.map( ( { value } ) => value ).join( this.options.split || " " );
 
-		return stripTags( html, this.options.allowedTags );
+		const strippedHTML = stripTags( html, this.options.allowedTags );
+
+		return strippedHTML || this.options.default;
 	}
 }
 
